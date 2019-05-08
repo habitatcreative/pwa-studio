@@ -5,16 +5,8 @@ const { imageOptimizingOrigin, backend } = document.querySelector(
 const useBackendForImgs = backend && imageOptimizingOrigin === 'backend';
 
 const mediaBases = new Map()
-    .set(
-        'image-product',
-        process.env.MAGENTO_BACKEND_MEDIA_PATH_PRODUCT ||
-            '/media/catalog/product'
-    )
-    .set(
-        'image-category',
-        process.env.MAGENTO_BACKEND_MEDIA_PATH_CATEGORY ||
-            '/media/catalog/category'
-    );
+    .set('image-product', '/media/catalog/product')
+    .set('image-category', '/media/catalog/category');
 
 /**
  * Creates an "optimized" url for a provided absolute or relative url based on
