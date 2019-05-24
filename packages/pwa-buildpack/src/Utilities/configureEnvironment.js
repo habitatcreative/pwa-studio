@@ -47,9 +47,7 @@ for (const section of sections) {
                 )} declares an unknown type ${variable.type}`
             );
         }
-        envalidValidationConfig[variable.name] = envalid[variable.type](
-            variable
-        );
+        envalidValidationConfig[variable.name] = typeFac(variable);
     }
 }
 
@@ -226,6 +224,22 @@ function applyBackwardsCompatChanges(env, log) {
         // the env isn't using the var with changes, no need to log
         const isSet = env.hasOwnProperty(change.name);
         switch (change.type) {
+            case 'defaultChanged':
+                // Example change only affects you if you have NOT set this var.
+                if (env[change.name] === change.original) {
+                    log.warn(
+                        `Default value for ${
+                            change.name
+                        } has changed in ${buildpackReleaseName}, due to ${
+                            change.reason
+                        }.\nOld value: ${change.original}\nNew value: ${
+                            change.update
+                        }\nThis project has not set a value for ${
+                            change.name
+                        }, so it is using the default value; check to make sure the change does not cause regressions.`
+                    );
+                }
+                break;
             case 'exampleChanged':
                 // Example change only affects you if you have NOT set this var.
                 if (env[change.name] === change.original) {

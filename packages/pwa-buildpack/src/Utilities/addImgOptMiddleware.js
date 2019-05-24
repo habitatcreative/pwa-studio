@@ -25,7 +25,7 @@ try {
 const wantsResizing = req => !!req.query.width;
 
 function addImgOptMiddleware(app, config) {
-    const { backendUrl, cacheExpires, cacheDebug, redis } = config;
+    const { backendUrl, cacheExpires, cacheDebug, redisClient } = config;
     debug(
         `mounting onboard image optimization middleware express-sharp with backend %s`,
         backendUrl
@@ -36,7 +36,8 @@ function addImgOptMiddleware(app, config) {
     try {
         cacheMiddleware = cache(cacheExpires, wantsResizing, {
             debug: cacheDebug,
-            redisClient: redis && require('redis').redisClient(redis)
+            redisClient:
+                redisClient && require('redis').redisClient(redisClient)
         });
     } catch (e) {
         markDepInvalid('apicache', e);
